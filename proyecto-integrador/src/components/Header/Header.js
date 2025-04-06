@@ -1,10 +1,16 @@
 import React from "react";
-import OpcionesMenu from "./OpcionesMenu";
+import {Link} from 'react-router-dom'
+
 
 function Header() {
     return (
         <header>
-            <h1>Soy el header</h1>
+        <nav>
+        <img src = '../img/logo.png' alt = ''/>
+        <Link to="/"><h1>Home</h1></Link>
+        <Link to="/Favoritos"><h1>Favoritos</h1></Link>
+        <Link to='/VerTodas'><h1>Ver Todas </h1></Link>
+        </nav>
         </header>
     )
 }

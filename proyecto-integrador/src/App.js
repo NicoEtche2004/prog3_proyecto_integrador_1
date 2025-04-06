@@ -1,14 +1,20 @@
+import Home from './screens/Home/Home';
+import Header from './components/Header/Header'
+import Footer from './components/Footer/Footer'
+import {Switch, Route} from 'react-router-dom'
+import Favoritos from './screens/Favoritos/Favoritos'
+import VerTodas from './screens/VerTodas/VerTodas'
 
 function App() {
   return (
     <>
-    <switch>
-        <Route path={'/'} exact={true} component={Home} />
-        <Route path={'/aboutus'} component={AboutUs} />
-        <Route path={'/detalle/:id'} component={Detalle} />
-        <Route path={''} component={NotFound} />
-    </switch>
-    <p>ahora anda</p>
+     <Header></Header>
+  <Switch>
+    <Route path = {'/'} exact = {true} component = {Home}/>
+    <Route path={'/Favoritos'} component={Favoritos} />
+    <Route path={'/VerTodas'} component={VerTodas} />
+       </Switch>
+    <Footer></Footer>
     </>
   );
 }
