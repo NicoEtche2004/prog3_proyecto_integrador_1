@@ -10,7 +10,7 @@ import Detalle from "./screens/Detalle/Detalle";
 import Favoritos from "./screens/Favoritos/Favoritos";
 import NotFound from "./screens/NotFound/NotFound";
 import VerTodas from './screens/VerTodas/VerTodas';
-// import Resultados from "./screens/Resultados/Resultados";
+import Resultados from "./screens/Resultados/Resultados";
 
 function App() {
   return (
@@ -21,6 +21,7 @@ function App() {
         <Route path="/detalle/:id" exact={true} component={Detalle} />
         <Route path="/favoritos" exact ={true} component={Favoritos} />    
         <Route path="/todas/:tipo"  component={VerTodas} />
+        <Route path="/resultados/:query" exact={true} component={Resultados} />
         <Route component={NotFound} />
       </Switch>
       <Footer />
