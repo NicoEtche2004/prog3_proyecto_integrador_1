@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Tarjeta from "../../components/Tarjeta/Tarjeta";
 import SearchForm from "../../components/SearchForm/SearchForm";
-import "./style.css"; // Asegúrate de importar el archivo CSS adecuado
+import "./style.css";
 
 export default class Home extends Component {
   constructor(props) {

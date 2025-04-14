@@ -16,7 +16,7 @@ header>div {
     flex-wrap: wrap;
 }
 
-/* Título */
+
 h1 {
     font-size: 28px;
     font-weight: 700;
@@ -26,7 +26,7 @@ h1 {
     text-transform: uppercase;
 }
 
-/* Menú */
+
 ul {
     list-style: none;
     display: flex;

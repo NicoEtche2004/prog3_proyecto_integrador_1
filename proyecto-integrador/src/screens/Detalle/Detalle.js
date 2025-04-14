@@ -35,26 +35,7 @@ export default class Detalle extends Component {
       });
   }
 
-  toggleFavorito = () => {
-    const { pelicula, favorito } = this.state;
-
-    let favsLocal = JSON.parse(localStorage.getItem("favoritos")) || [];
-    let favsSession = JSON.parse(sessionStorage.getItem("favoritos")) || [];
-
-    if (favorito) {
-      favsLocal = favsLocal.filter((p) => p.id !== pelicula.id);
-      favsSession = favsSession.filter((p) => p.id !== pelicula.id);
-    } else {
-      favsLocal.push(pelicula);
-      favsSession.push(pelicula);
-    }
-
-    localStorage.setItem("favoritos", JSON.stringify(favsLocal));
-    sessionStorage.setItem("favoritos", JSON.stringify(favsSession));
-
-    this.setState({ favorito: !favorito });
-  };
-
+  
   render() {
     const { pelicula, favorito } = this.state;
 
