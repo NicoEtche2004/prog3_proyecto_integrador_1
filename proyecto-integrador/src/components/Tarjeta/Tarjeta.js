@@ -10,38 +10,23 @@ class Tarjeta extends Component {
       favorito: false,
     };
 
-    const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
-    const esFavorito = favoritos.some((p) => p.id === this.props.pelicula.id);
-    this.state.favorito = esFavorito;
+
   }
 
-  toggleDescripcion = () => {
-    this.setState((prevState) => ({
-      mostrarDescripcion: !prevState.mostrarDescripcion,
-    }));
-  };
+ Descripcion = () => {
+  const nuevoEstado = !this.state.mostrarDescripcion;
+  this.setState({ mostrarDescripcion: nuevoEstado });
+};
 
-  toggleFavorito = () => {
-    const pelicula = this.props.pelicula;
 
-    let favsLocal = JSON.parse(localStorage.getItem("favoritos")) || [];
-    let favsSession = JSON.parse(sessionStorage.getItem("favoritos")) || [];
+Favorito = () => {
+  this.setState((prevState) => ({
+    favorito: !prevState.favorito
 
-    let esFavorito = this.state.favorito;
+    // y aca quiero que agregues a favoritos el id y lo mandes como prop a otra pagina de esta forma aca te doy un ejemplo de carrito pero lo tenes que hacer con agregar y sacar de favoritos
+  }));
+};
 
-    if (esFavorito) {
-      favsLocal = favsLocal.filter((p) => p.id !== pelicula.id);
-      favsSession = favsSession.filter((p) => p.id !== pelicula.id);
-    } else {
-      favsLocal.push(pelicula);
-      favsSession.push(pelicula);
-    }
-
-    localStorage.setItem("favoritos", JSON.stringify(favsLocal));
-    sessionStorage.setItem("favoritos", JSON.stringify(favsSession));
-
-    this.setState({ favorito: !esFavorito });
-  };
 
   render() {
     const { pelicula } = this.props;
@@ -64,7 +49,7 @@ class Tarjeta extends Component {
             : `${pelicula.overview.slice(0, 100)}...`}
         </p>
 
-        <button onClick={this.toggleDescripcion}>
+        <button onClick={this.Descripcion}>
           {mostrarDescripcion ? "Ocultar descripción" : "Ver descripción"}
         </button>
 
@@ -74,7 +59,7 @@ class Tarjeta extends Component {
         </Link>
 
         {/* Botón de agregar/quitar de favoritos */}
-        <button onClick={this.toggleFavorito}>
+        <button onClick={this.Favorito}>
           {favorito ? "Quitar de favoritos" : "Agregar a favoritos"}
         </button>
       </div>
