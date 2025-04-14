@@ -1,18 +1,28 @@
-import React from "react";
-import {Link} from 'react-router-dom'
+import { Link } from "react-router-dom";
 
-
-function Header() {
-    return (
-        <header>
+export default function Header() {
+  const navItems = [
+    { path: "/", label: "Digital Cine" },
+    { path: "/", label: "Home" },
+    { path: "/Favoritos", label: "Favoritos" },
+    { path: "/todas/populares", label: "Populares" },
+    { path: "/todas/proximas", label: "Por venir" },
+  ];
+  // aca cambie
+  return (
+    <header>
+      <div>
+        <h1>MiAplicación</h1>
         <nav>
-        <img src = '../img/logo.png' alt = ''/>
-        <Link to="/"><h1>Home</h1></Link>
-        <Link to="/Favoritos"><h1>Favoritos</h1></Link>
-        <Link to='/VerTodas'><h1>Ver Todas </h1></Link>
+          <ul>
+            {navItems.map((elm, idx) => (
+              <li key={`${elm.label}-${idx}`}>
+                <Link to={elm.path}>{elm.label}</Link>
+              </li>
+            ))}
+          </ul>
         </nav>
-        </header>
-    )
+      </div>
+    </header>
+  );
 }
-
-export default Header

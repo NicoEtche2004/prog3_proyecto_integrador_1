@@ -1,11 +1,10 @@
-import React from 'react'
+import React from "react";
 
-function Footer() {
+
+export default function Footer() {
   return (
-    <footer>
-        <p>Integrantes del grupo: Pedro Maldini, Octavio Guerra y Nicolas Etchepare</p>
+    <footer className="footer">
+      <p>Integrantes del equipo: Pedro, Nicolas, Octavio</p>
     </footer>
-  )
+  );
 }
-
-export default Footer
