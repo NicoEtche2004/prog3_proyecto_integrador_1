@@ -40,30 +40,19 @@ export default class Populares extends Component {
       .catch((error) => console.log(error));
   }
 
-  handleChange(e) {
-    this.setState({ filtro: e.target.value });
-  }
+
 
   render() {
-    let peliculasFiltradas = this.state.peliculas.filter((peli) =>
+    let peliculas = this.state.peliculas.filter((peli) =>
       peli.title.toLowerCase().includes(this.state.filtro.toLowerCase())
     );
 
     return (
       <>
-        <form>
-          <input
-            type="text"
-            placeholder="Filtrar películas por título..."
-            value={this.state.filtro}
-            onChange={(e) => this.handleChange(e)}
-          />
-        </form>
-
         <h2>Películas Populares</h2>
 
         <div className="tarjetas-container">
-          {peliculasFiltradas.map((elm, i) => (
+          {peliculas.map((elm, i) => (
             <Tarjeta key={i} pelicula={elm} />
           ))}
         </div>

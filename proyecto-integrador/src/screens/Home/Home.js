@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Tarjeta from "../../components/Tarjeta/Tarjeta";
-import SearchForm from "../../components/SearchForm/SearchForm";
+// import SearchForm from "../../components/SearchForm/SearchForm"; lo comento por ahora porque lo tenemos que hacer todo de 0
 import "./style.css";
 
 export default class Home extends Component {
@@ -50,23 +50,16 @@ export default class Home extends Component {
       });
   }
 
-  handleSearch = (query) => {
-    const resultados = this.state.peliculas.filter((peli) =>
-      peli.title.toLowerCase().includes(query.toLowerCase())
-    );
-    this.setState({ filtradas: resultados });
-  };
+
 
   render() {
     return (
       <>
-        <SearchForm onSearch={this.handleSearch} />
-        
         <div className="categorias">
           <div className="categoria">
             <h2>Películas populares</h2>
             <div className="tarjetas-container">
-              {this.state.filtradas.slice(0, 5).map((elm, idx) => (
+              {this.state.peliculas.slice(0, 5).map((elm, idx) => (
                 <Tarjeta key={`${elm}-${idx}`} pelicula={elm} />
               ))}
             </div>
@@ -78,7 +71,7 @@ export default class Home extends Component {
           <div className="categoria">
             <h2>Próximos estrenos</h2>
             <div className="tarjetas-container">
-              {this.state.filtradas.slice(0, 5).map((elm, idx) => (
+              {this.state.proximas.slice(0, 5).map((elm, idx) => (
                 <Tarjeta key={`${elm}-${idx}`} pelicula={elm} />
               ))}
             </div>
