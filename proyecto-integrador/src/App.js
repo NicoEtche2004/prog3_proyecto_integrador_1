@@ -9,7 +9,7 @@ import Home from "./screens/Home/Home";
 import Detalle from "./screens/Detalle/Detalle";
 // import Favoritos from "./screens/Favoritos/Favoritos";
 import NotFound from "./screens/NotFound/NotFound";
-// import VerTodas from './screens/VerTodas/VerTodas';
+import VerTodas from './screens/VerTodas/VerTodas';
 // import Resultados from "./screens/Resultados/Resultados";
 
 function App() {
@@ -18,8 +18,9 @@ function App() {
       <Header />
       <Switch>
         <Route path="/" exact={true} component={Home} />
-        <Route path="/detalle/:id" exact={true} component={Detalle} />
-        <Route path="" exact={true} component={NotFound} />
+        <Route path="/detalle/:id" exact={true} component={Detalle} />    
+        <Route path="/todas/:tipo"  component={VerTodas} />
+        <Route component={NotFound} />
       </Switch>
       <Footer />
     </>
