@@ -1,18 +1,20 @@
 import { Link } from "react-router-dom";
+import "./style.css";
 
 export default function Header() {
   const navItems = [
-    { path: "/", label: "Digital Cine" },
+   
     { path: "/", label: "Home" },
     { path: "/Favoritos", label: "Favoritos" },
     { path: "/populares", label: "Populares" },
     { path: "/proximas", label: "Estenos" },
   ];
-  // aca cambie
+
   return (
     <header>
-      <div>
-        <h1>MiAplicación</h1>
+      <div> <Link to="/">
+        <h1>Digital Cine</h1>
+        </Link>
         <nav>
           <ul>
             {navItems.map((elm, idx) => (

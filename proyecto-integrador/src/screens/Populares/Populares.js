@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import Tarjeta from "../../components/Tarjeta/Tarjeta";
+import "./style.css"; // Asegúrate de importar el archivo CSS adecuado
 
-export default class VerTodas extends Component {
+export default class Populares extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -45,9 +46,8 @@ export default class VerTodas extends Component {
 
   render() {
     let peliculasFiltradas = this.state.peliculas.filter((peli) =>
-  peli.title.toLowerCase().includes(this.state.filtro.toLowerCase())
-);
-
+      peli.title.toLowerCase().includes(this.state.filtro.toLowerCase())
+    );
 
     return (
       <>
@@ -62,9 +62,11 @@ export default class VerTodas extends Component {
 
         <h2>Películas Populares</h2>
 
-        {peliculasFiltradas.map((elm, i) => (
-          <Tarjeta key={i} pelicula={elm} />
-        ))}
+        <div className="tarjetas-container">
+          {peliculasFiltradas.map((elm, i) => (
+            <Tarjeta key={i} pelicula={elm} />
+          ))}
+        </div>
 
         <button onClick={() => this.cargarPeliculas()}>Ver más</button>
       </>

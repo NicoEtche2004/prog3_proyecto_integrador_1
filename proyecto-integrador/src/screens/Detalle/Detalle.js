@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import "./style.css";
 
 export default class Detalle extends Component {
   constructor(props) {
@@ -21,7 +22,7 @@ export default class Detalle extends Component {
       },
     };
 
-    fetch(`https://api.themoviedb.org/3/movie/${id}?language=en-US`, options)
+    fetch(`https://api.themoviedb.org/3/movie/${id}?language=es-ES`, options)
       .then((res) => res.json())
       .then((data) => {
         const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
@@ -55,11 +56,11 @@ export default class Detalle extends Component {
   };
 
   render() {
-    const { pelicula } = this.state;
+    const { pelicula, favorito } = this.state;
 
     if (!pelicula) {
       return (
-        <div style={{ textAlign: "center", marginTop: "50px" }}>
+        <div className="loading-container">
           <img
             src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif"
             alt="Cargando..."
@@ -71,33 +72,35 @@ export default class Detalle extends Component {
     }
 
     return (
-      <div>
-        <img
-          src={`https://image.tmdb.org/t/p/w500${pelicula.poster_path}`}
-          alt={pelicula.title}
-          width="200"
-          height="300"
-        />
+      <div className="detalle-container">
+        <div className="detalle-header">
+          <img
+            className="detalle-img"
+            src={`https://image.tmdb.org/t/p/w500${pelicula.poster_path}`}
+            alt={pelicula.title}
+          />
+          <div className="detalle-info">
+            <h1>{pelicula.title}</h1>
+            <p className="descripcion">{pelicula.overview}</p>
+            <p><strong>Estreno:</strong> {pelicula.release_date}</p>
 
-        <h1>{pelicula.title}</h1>
-        <p>{pelicula.overview}</p>
+            <h3>Géneros:</h3>
+            <ul>
+              {pelicula.genres.map((genre) => (
+                <li key={genre.id}>{genre.name}</li>
+              ))}
+            </ul>
 
-        <p>Estreno: {pelicula.release_date}</p>
-
-        <h3>Géneros:</h3>
-        <ul>
-          {pelicula.genres.map((genre) => (
-            <li key={genre.id}>{genre.name}</li>
-          ))}
-        </ul>
-
-        <button onClick={this.toggleFavorito}>
-          {this.state.favorito ? "Quitar de favoritos" : "Agregar a favoritos"}
-        </button>
-
-        <Link to="/">
-          <button>Volver a la Home</button>
-        </Link>
+            <div className="button-group">
+              <button onClick={this.toggleFavorito}>
+                {favorito ? "Quitar de favoritos" : "Agregar a favoritos"}
+              </button>
+              <Link to="/">
+                <button>Volver a la Home</button>
+              </Link>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

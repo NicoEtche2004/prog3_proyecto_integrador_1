@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Tarjeta from "../../components/Tarjeta/Tarjeta";
+import "./style.css"; // Asegúrate de importar el archivo CSS adecuado
 
 class Favoritos extends Component {
   constructor(props) {
@@ -23,25 +24,26 @@ class Favoritos extends Component {
     this.setState({ favoritos: nuevosFavs });
   };
 
-  render() {
-    const { favoritos } = this.state;
+render() {
+  const { favoritos } = this.state;
 
-    return (
-      <div>
-        <h2>Mis favoritos</h2>
+  return (
+    <div className="favoritos">
+      <h2>Mis favoritos</h2>
 
-        {favoritos.length === 0 ? (
-          <p>No tenés películas favoritas todavía.</p>
-        ) : (
-          favoritos.map((peli) => (
-            <div key={peli.id}>
-              <Tarjeta pelicula={peli} />
-            </div>
-          ))
-        )}
-      </div>
-    );
-  }
+      {favoritos.length === 0 ? (
+        <p>No tenés películas favoritas todavía.</p>
+      ) : (
+        <div className="tarjetas-container">
+          {favoritos.map((peli) => (
+            <Tarjeta key={peli.id} pelicula={peli} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 }
 
 export default Favoritos;

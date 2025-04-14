@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Tarjeta from "../../components/Tarjeta/Tarjeta";
 import SearchForm from "../../components/SearchForm/SearchForm";
-
+import "./style.css"; // Asegúrate de importar el archivo CSS adecuado
 
 export default class Home extends Component {
   constructor(props) {
@@ -61,21 +61,32 @@ export default class Home extends Component {
     return (
       <>
         <SearchForm onSearch={this.handleSearch} />
-        <h2>Películas populares</h2>
-        {this.state.filtradas.slice(0, 5).map((elm, idx) => (
-          <Tarjeta key={`${elm}-${idx}`} pelicula={elm} />
-        ))}
-        <Link to="/populares">
-          <button>Ver todas</button>
-        </Link>
+        
+        <div className="categorias">
+          <div className="categoria">
+            <h2>Películas populares</h2>
+            <div className="tarjetas-container">
+              {this.state.filtradas.slice(0, 5).map((elm, idx) => (
+                <Tarjeta key={`${elm}-${idx}`} pelicula={elm} />
+              ))}
+            </div>
+            <Link to="/populares">
+              <button>Ver más Populares</button>
+            </Link>
+          </div>
 
-        <h2>Próximos estrenos</h2>
-        {this.state.filtradas.slice(0, 5).map((elm, idx) => (
-          <Tarjeta key={`${elm}-${idx}`} pelicula={elm} />
-        ))}
-        <Link to="/proximas">
-          <button>Ver todas</button>
-        </Link>
+          <div className="categoria">
+            <h2>Próximos estrenos</h2>
+            <div className="tarjetas-container">
+              {this.state.filtradas.slice(0, 5).map((elm, idx) => (
+                <Tarjeta key={`${elm}-${idx}`} pelicula={elm} />
+              ))}
+            </div>
+            <Link to="/proximas">
+              <button>Ver más Estrenos </button>
+            </Link>
+          </div>
+        </div>
       </>
     );
   }
