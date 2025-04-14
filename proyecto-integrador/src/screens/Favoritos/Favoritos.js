@@ -15,9 +15,9 @@ class Favoritos extends Component {
     if (storage !== null) {
       const ids = JSON.parse(storage);
       let pelisCargadas = [];
-
-      for (let i = 0; i < ids.length; i++) {
-        fetch(`https://api.themoviedb.org/3/movie/${ids[i]}`, {
+  
+      ids.map((id) => {
+        return fetch(`https://api.themoviedb.org/3/movie/${id}`, {
           headers: {
             accept: "application/json",
             Authorization:
@@ -29,9 +29,9 @@ class Favoritos extends Component {
             pelisCargadas.push(data);
             this.setState({ pelisFavoritas: pelisCargadas });
           });
-      }
+      });
     }
-  }
+  }  
 
   quitarPeliDeVista = (id) => {
     const actualizadas = this.state.pelisFavoritas.filter((p) => p.id !== id);

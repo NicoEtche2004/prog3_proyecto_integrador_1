@@ -26,21 +26,22 @@ class Tarjeta extends Component {
 
   agregarAFavoritos(id) {
     let storage = localStorage.getItem("favoritos");
-
+  
     if (storage !== null) {
       let arrParseado = JSON.parse(storage);
-      arrParseado.push(id);
-      let arrStringificado = JSON.stringify(arrParseado);
-      localStorage.setItem("favoritos", arrStringificado);
+  
+      if (!arrParseado.includes(id)) {
+        arrParseado.push(id);
+        let arrStringificado = JSON.stringify(arrParseado);
+        localStorage.setItem("favoritos", arrStringificado);
+        this.setState({ favorito: true });
+      }
     } else {
       let primerID = [id];
       let arrStringificado = JSON.stringify(primerID);
       localStorage.setItem("favoritos", arrStringificado);
+      this.setState({ favorito: true });
     }
-
-    this.setState({
-      favorito: true,
-    });
   }
 
   quitarDeFavoritos(id) {
