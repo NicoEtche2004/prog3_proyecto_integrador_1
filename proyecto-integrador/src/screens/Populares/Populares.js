@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Tarjeta from "../../components/Tarjeta/Tarjeta";
+import FormularioFiltro from "../../components/FormularioFiltro/FormularioFiltro"; 
 import "./style.css";
 
 export default class Populares extends Component {
@@ -7,8 +8,10 @@ export default class Populares extends Component {
     super(props);
     this.state = {
       peliculas: [],
+      backuppeliculas: [], 
       pagina: 1,
-      cargando: true,
+      noResultados: false, 
+      filtro: "", 
     };
   }
 
@@ -17,7 +20,9 @@ export default class Populares extends Component {
   }
 
   cargarPeliculas() {
-    const url = "https://api.themoviedb.org/3/movie/popular?language=en-US&page=" + this.state.pagina;
+    const url =
+      "https://api.themoviedb.org/3/movie/popular?language=en-US&page=" +
+      this.state.pagina;
 
     fetch(url, {
       method: "GET",
@@ -32,15 +37,37 @@ export default class Populares extends Component {
         let nuevasPeliculas = this.state.peliculas.concat(data.results);
         this.setState({
           peliculas: nuevasPeliculas,
+          backuppeliculas: nuevasPeliculas, 
           pagina: this.state.pagina + 1,
           cargando: false,
+          noResultados: nuevasPeliculas.length === 0, 
         });
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.log(error);
+        this.setState({
+          cargando: false,
+          noResultados: true, 
+        });
+      });
   }
 
+ 
+  filtrarPeliculas = (filtroUsuario) => {
+    this.setState({ filtro: filtroUsuario }, () => {
+      const peliculasFiltradas = this.state.backuppeliculas.filter((peli) =>
+        peli.title.toLowerCase().includes(filtroUsuario.toLowerCase())
+      );
+      this.setState({
+        peliculas: peliculasFiltradas,
+        noResultados: peliculasFiltradas.length === 0, 
+      });
+    });
+  };
+
   render() {
-    if (this.state.cargando && this.state.peliculas.length === 0) {
+   
+    if (this.state.cargando) {
       return (
         <div className="loading-container">
           <img
@@ -55,18 +82,31 @@ export default class Populares extends Component {
 
     return (
       <>
+        
+        <FormularioFiltro filtro={this.filtrarPeliculas} />
+
         <h2>Películas Populares</h2>
 
-        <div className="tarjetas-container">
-          {this.state.peliculas.length > 0 ? (
-            this.state.peliculas.map((elm, i) => (
-              <Tarjeta key={`${elm.title}-${i}`} pelicula={elm} />
-            ))
-          ) : (
+        
+        {this.state.noResultados ? (
+          <div className="no-resultados">
             <p>No se encontraron películas.</p>
-          )}
-        </div>
+          
+          </div>
+        ) : (
+          <div className="tarjetas-container">
+            
+            {this.state.peliculas.length > 0 ? (
+              this.state.peliculas.map((elm, i) => (
+                <Tarjeta key={`${elm.title}-${i}`} pelicula={elm} />
+              ))
+            ) : (
+              <p>No se encontraron películas.</p>
+            )}
+          </div>
+        )}
 
+        
         <button onClick={() => this.cargarPeliculas()}>Ver más</button>
       </>
     );

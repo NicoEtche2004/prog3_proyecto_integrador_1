@@ -1,8 +1,9 @@
 .detalle-container {
     display: flex;
     justify-content: center;
-    margin: 20px;
+    padding: 20px;
 }
+
 .detalle-header {
     display: flex;
     background-color: white;
@@ -11,42 +12,65 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     width: 90%;
-    max-width: 700px;
-   
-}
-.detalle-img {
-    border-radius: 10px;
-    width: 180px;
-    height: 270px;
-    object-fit: cover;
-    margin-right: 15px;
+    max-width: 900px;
 }
 
 .detalle-info {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
+
+.detalle-info h1 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
 .descripcion {
-    font-size: 14px;
+    font-size: 16px;
     color: #666;
-    line-height: 1.5;
+    line-height: 1.6;
     margin-bottom: 20px;
 }
+
+h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+ul li {
+    font-size: 14px;
+    color: #333;
+}
+
 button {
     background-color: #e50914;
     color: white;
     border: none;
     padding: 10px 20px;
     border-radius: 5px;
-    font-size: 13px;
+    font-size: 14px;
     cursor: pointer;
     transition: background-color 0.3s ease-in-out;
     margin: 5px;
 }
+
+button:hover {
+    background-color: #d40810;
+}
+
 .button-group {
     display: flex;
     gap: 10px;
     margin-top: 15px;
 }
+
 @media (max-width: 768px) {
     .detalle-header {
         flex-direction: column;
@@ -54,7 +78,7 @@ button {
     }
 
     .detalle-img {
-        width: 100%;
+        width: 30%;
         height: auto;
         margin-bottom: 15px;
     }

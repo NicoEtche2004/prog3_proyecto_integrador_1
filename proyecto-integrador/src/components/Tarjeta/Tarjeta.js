@@ -51,12 +51,12 @@ Favorito = () => {
           {mostrarDescripcion ? "Ocultar descripción" : "Ver descripción"}
         </button>
 
-        {/* Enlace al detalle de la película */}
+        
         <Link to={`/detalle/${pelicula.id}`}>
           <button>Ir a detalle</button>
         </Link>
 
-        {/* Botón de agregar/quitar de favoritos */}
+        
         <button onClick={this.Favorito}>
           {favorito ? "Quitar de favoritos" : "Agregar a favoritos"}
         </button>

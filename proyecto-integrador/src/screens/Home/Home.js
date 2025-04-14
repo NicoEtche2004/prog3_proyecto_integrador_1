@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Tarjeta from "../../components/Tarjeta/Tarjeta";
+
 import "./style.css";
 
 export default class Home extends Component {
@@ -11,7 +12,6 @@ export default class Home extends Component {
       proximas: [],
       paginaActual: 1,
       filtradas: [],
-      cargando: true,
     };
   }
 
@@ -25,27 +25,36 @@ export default class Home extends Component {
       },
     };
 
-    Promise.all([
-      fetch("https://api.themoviedb.org/3/movie/popular?language=en-US&page=1", options).then((res) => res.json()),
-      fetch("https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1", options).then((res) => res.json()),
-    ])
-      .then(([populares, proximas]) => {
+  
+    fetch(
+      "https://api.themoviedb.org/3/movie/popular?language=en-US&page=1",
+      options
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Películas populares:", data);
         this.setState({
-          peliculas: populares.results,
-          filtradas: populares.results,
-          proximas: proximas.results,
+          peliculas: data.results,
+          filtradas: data.results,
           paginaActual: 1,
-          cargando: false,
         });
-      })
-      .catch((error) => {
-        console.log(error);
-        this.setState({ cargando: false });
+      });
+
+    
+    fetch(
+      "https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1",
+      options
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Próximos estrenos:", data);
+        this.setState({ proximas: data.results });
       });
   }
 
   render() {
-    if (this.state.cargando) {
+    
+     if (this.state.peliculas.length === 0) {
       return (
         <div className="loading-container">
           <img
@@ -57,7 +66,20 @@ export default class Home extends Component {
         </div>
       );
     }
+    
+    if (this.state.cargando === 0) {
+      return (
+        <div className="loading-container">
+          <img
+            src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif"
+            alt="Cargando..."
+            width="100"
+          />
+          <p>Cargando...</p>
+        </div>
+      );
 
+    }
     return (
       <>
         <div className="categorias">
@@ -65,7 +87,7 @@ export default class Home extends Component {
             <h2>Películas populares</h2>
             <div className="tarjetas-container">
               {this.state.peliculas.slice(0, 5).map((elm, idx) => (
-                <Tarjeta key={`${elm.title}-${idx}`} pelicula={elm} />
+                <Tarjeta key={`${elm}-${idx}`} pelicula={elm} />
               ))}
             </div>
             <Link to="/populares">
@@ -77,7 +99,7 @@ export default class Home extends Component {
             <h2>Próximos estrenos</h2>
             <div className="tarjetas-container">
               {this.state.proximas.slice(0, 5).map((elm, idx) => (
-                <Tarjeta key={`${elm.title}-${idx}`} pelicula={elm} />
+                <Tarjeta key={`${elm}-${idx}`} pelicula={elm} />
               ))}
             </div>
             <Link to="/proximas">

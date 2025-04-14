@@ -1,6 +1,5 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import "./style.css";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 export default class Detalle extends Component {
   constructor(props) {
@@ -12,22 +11,22 @@ export default class Detalle extends Component {
   }
 
   componentDidMount() {
-    const { id } = this.props.match.params;
+    const { id } = this.props.match.params; 
     const options = {
-      method: "GET",
+      method: 'GET',
       headers: {
-        accept: "application/json",
+        accept: 'application/json',
         Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2NDQ3NTA0ZjllODhiZDIzNzhlYmU0OTE2Y2FiMzE4NCIsIm5iZiI6MTc0MjIxMzE1OS4zMDA5OTk5LCJzdWIiOiI2N2Q4MTAyNzMxNTM4ZGU2MDhmMWUzMTQiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.YTX_q1oWy0cZlL0KzomYbkSDB6x-eGrOcSytRCI2WQQ",
+          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2NDQ3NTA0ZjllODhiZDIzNzhlYmU0OTE2Y2FiMzE4NCIsIm5iZiI6MTc0MjIxMzE1OS4zMDA5OTk5LCJzdWIiOiI2N2Q4MTAyNzMxNTM4ZGU2MDhmMWUzMTQiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.YTX_q1oWy0cZlL0KzomYbkSDB6x-eGrOcSytRCI2WQQ',
       },
     };
 
-    fetch(`https://api.themoviedb.org/3/movie/${id}?language=es-ES`, options)
+    fetch(`https://api.themoviedb.org/3/movie/${id}?language=en-US`, options)
       .then((res) => res.json())
       .then((data) => {
-        const favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
+        const favoritos = JSON.parse(localStorage.getItem('favoritos')) || [];
         const esFav = favoritos.some((p) => p.id === data.id);
-
+      
         this.setState({
           pelicula: data,
           favorito: esFav,
@@ -35,30 +34,22 @@ export default class Detalle extends Component {
       });
   }
 
-  
+
+
   render() {
-    const { pelicula, favorito } = this.state;
+    const pelicula = this.state.pelicula;
 
     if (!pelicula) {
-      return (
-        <div className="loading-container">
-          <img
-            src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif"
-            alt="Cargando..."
-            width="100"
-          />
-          <p>Cargando...</p>
-        </div>
-      );
+      return <p>Cargando...</p>;
     }
 
     return (
       <div className="detalle-container">
         <div className="detalle-header">
-          <img
-            className="detalle-img"
-            src={`https://image.tmdb.org/t/p/w500${pelicula.poster_path}`}
-            alt={pelicula.title}
+          <img 
+            src={`https://image.tmdb.org/t/p/w500${pelicula.poster_path}`} 
+            alt={pelicula.title} 
+            className="detalle-img" 
           />
           <div className="detalle-info">
             <h1>{pelicula.title}</h1>
@@ -74,8 +65,9 @@ export default class Detalle extends Component {
 
             <div className="button-group">
               <button onClick={this.toggleFavorito}>
-                {favorito ? "Quitar de favoritos" : "Agregar a favoritos"}
+                {this.state.favorito ? 'Quitar de favoritos' : 'Agregar a favoritos'}
               </button>
+
               <Link to="/">
                 <button>Volver a la Home</button>
               </Link>

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Tarjeta from "../../components/Tarjeta/Tarjeta";
-import FormularioFiltro from "../../components/FormularioFiltro/FormularioFiltro";
+import FormularioFiltro from "../../components/FormularioFiltro/FormularioFiltro"; 
 import "./style.css";
 
 export default class EnBreve extends Component {
@@ -8,9 +8,10 @@ export default class EnBreve extends Component {
     super(props);
     this.state = {
       peliculas: [],
-      backuppeliculas: [],
+      backuppeliculas: [], 
       pagina: 1,
-      cargando: true,
+      noResultados: false, 
+      filtro: "", 
     };
   }
 
@@ -19,7 +20,9 @@ export default class EnBreve extends Component {
   }
 
   cargarPeliculas() {
-    const url = `https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=${this.state.pagina}`;
+    const url =
+      "https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=" +
+      this.state.pagina;
 
     fetch(url, {
       method: "GET",
@@ -31,54 +34,68 @@ export default class EnBreve extends Component {
     })
       .then((res) => res.json())
       .then((data) => {
-        const nuevasPeliculas = this.state.peliculas.concat(data.results);
+        let nuevasPeliculas = this.state.peliculas.concat(data.results);
         this.setState({
           peliculas: nuevasPeliculas,
-          backuppeliculas: nuevasPeliculas,
+          backuppeliculas: nuevasPeliculas, 
           pagina: this.state.pagina + 1,
           cargando: false,
+          noResultados: nuevasPeliculas.length === 0, 
         });
       })
       .catch((error) => {
         console.log(error);
-        this.setState({ cargando: false });
+        this.setState({
+          cargando: false,
+          noResultados: true, 
+        });
       });
   }
 
+  
   filtrarPeliculas = (filtroUsuario) => {
-    const peliculasFiltradas = this.state.backuppeliculas.filter((peli) =>
-      peli.title.toLowerCase().includes(filtroUsuario.toLowerCase())
-    );
-    this.setState({ peliculas: peliculasFiltradas });
+    this.setState({ filtro: filtroUsuario }, () => {
+      const peliculasFiltradas = this.state.backuppeliculas.filter((peli) =>
+        peli.title.toLowerCase().includes(filtroUsuario.toLowerCase())
+      );
+      this.setState({
+        peliculas: peliculasFiltradas,
+        noResultados: peliculasFiltradas.length === 0, 
+      });
+    });
   };
 
   render() {
-    if (this.state.cargando) {
-      return (
-        <div className="loading-container">
-          <img
-            src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif"
-            alt="Cargando..."
-            width="100"
-          />
-          <p>Cargando...</p>
-        </div>
-      );
-    }
+   
+
 
     return (
       <>
+       
         <FormularioFiltro filtro={this.filtrarPeliculas} />
+
         <h2>Próximos Estrenos</h2>
-        <div className="tarjetas-container">
-          {this.state.peliculas.length > 0 ? (
-            this.state.peliculas.map((elm, idx) => (
-              <Tarjeta key={`${elm.title}-${idx}`} pelicula={elm} />
-            ))
-          ) : (
+
+        
+        {this.state.noResultados ? (
+          <div className="no-resultados">
             <p>No se encontraron películas.</p>
-          )}
-        </div>
+            <p>Intenta cargar más o filtrar los resultados.</p>
+          </div>
+        ) : (
+          <div className="tarjetas-container">
+            
+            {this.state.peliculas.length > 0 ? (
+              this.state.peliculas.map((elm, i) => (
+                <Tarjeta key={`${elm.title}-${i}`} pelicula={elm} />
+              ))
+            ) : (
+              <p>No se encontraron películas.</p>
+            )}
+          </div>
+        )}
+
+        
         <button onClick={() => this.cargarPeliculas()}>Ver más</button>
       </>
     );
