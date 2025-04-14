@@ -7,7 +7,7 @@ export default function Header() {
     { path: "/", label: "Home" },
     { path: "/Favoritos", label: "Favoritos" },
     { path: "/populares", label: "Populares" },
-    { path: "/proximas", label: "Estenos" },
+    { path: "/proximas", label: "Estrenos" },
   ];
 
   return (

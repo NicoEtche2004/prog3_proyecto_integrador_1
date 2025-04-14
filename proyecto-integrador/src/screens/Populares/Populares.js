@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Tarjeta from "../../components/Tarjeta/Tarjeta";
-import "./style.css"; 
+import "./style.css";
 
 export default class Populares extends Component {
   constructor(props) {
@@ -8,7 +8,7 @@ export default class Populares extends Component {
     this.state = {
       peliculas: [],
       pagina: 1,
-      filtro: "",
+      cargando: true,
     };
   }
 
@@ -17,9 +17,7 @@ export default class Populares extends Component {
   }
 
   cargarPeliculas() {
-    const url =
-      "https://api.themoviedb.org/3/movie/popular?language=en-US&page=" +
-      this.state.pagina;
+    const url = "https://api.themoviedb.org/3/movie/popular?language=en-US&page=" + this.state.pagina;
 
     fetch(url, {
       method: "GET",
@@ -35,26 +33,38 @@ export default class Populares extends Component {
         this.setState({
           peliculas: nuevasPeliculas,
           pagina: this.state.pagina + 1,
+          cargando: false,
         });
       })
       .catch((error) => console.log(error));
   }
 
-
-
   render() {
-    let peliculas = this.state.peliculas.filter((peli) =>
-      peli.title.toLowerCase().includes(this.state.filtro.toLowerCase())
-    );
+    if (this.state.cargando && this.state.peliculas.length === 0) {
+      return (
+        <div className="loading-container">
+          <img
+            src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif"
+            alt="Cargando..."
+            width="100"
+          />
+          <p>Cargando...</p>
+        </div>
+      );
+    }
 
     return (
       <>
         <h2>Películas Populares</h2>
 
         <div className="tarjetas-container">
-          {peliculas.map((elm, i) => (
-            <Tarjeta key={i} pelicula={elm} />
-          ))}
+          {this.state.peliculas.length > 0 ? (
+            this.state.peliculas.map((elm, i) => (
+              <Tarjeta key={`${elm.title}-${i}`} pelicula={elm} />
+            ))
+          ) : (
+            <p>No se encontraron películas.</p>
+          )}
         </div>
 
         <button onClick={() => this.cargarPeliculas()}>Ver más</button>

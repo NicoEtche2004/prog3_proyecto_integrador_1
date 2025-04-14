@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Tarjeta from "../../components/Tarjeta/Tarjeta";
-// import SearchForm from "../../components/SearchForm/SearchForm"; lo comento por ahora porque lo tenemos que hacer todo de 0
 import "./style.css";
 
 export default class Home extends Component {
@@ -12,6 +11,7 @@ export default class Home extends Component {
       proximas: [],
       paginaActual: 1,
       filtradas: [],
+      cargando: true,
     };
   }
 
@@ -25,34 +25,39 @@ export default class Home extends Component {
       },
     };
 
-    fetch(
-      "https://api.themoviedb.org/3/movie/popular?language=en-US&page=1",
-      options
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("Películas populares:", data);
+    Promise.all([
+      fetch("https://api.themoviedb.org/3/movie/popular?language=en-US&page=1", options).then((res) => res.json()),
+      fetch("https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1", options).then((res) => res.json()),
+    ])
+      .then(([populares, proximas]) => {
         this.setState({
-          peliculas: data.results,
-          filtradas: data.results,
+          peliculas: populares.results,
+          filtradas: populares.results,
+          proximas: proximas.results,
           paginaActual: 1,
+          cargando: false,
         });
-      });
-
-    fetch(
-      "https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1",
-      options
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("Próximos estrenos:", data);
-        this.setState({ proximas: data.results });
+      })
+      .catch((error) => {
+        console.log(error);
+        this.setState({ cargando: false });
       });
   }
 
-
-
   render() {
+    if (this.state.cargando) {
+      return (
+        <div className="loading-container">
+          <img
+            src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif"
+            alt="Cargando..."
+            width="100"
+          />
+          <p>Cargando...</p>
+        </div>
+      );
+    }
+
     return (
       <>
         <div className="categorias">
@@ -60,7 +65,7 @@ export default class Home extends Component {
             <h2>Películas populares</h2>
             <div className="tarjetas-container">
               {this.state.peliculas.slice(0, 5).map((elm, idx) => (
-                <Tarjeta key={`${elm}-${idx}`} pelicula={elm} />
+                <Tarjeta key={`${elm.title}-${idx}`} pelicula={elm} />
               ))}
             </div>
             <Link to="/populares">
@@ -72,11 +77,11 @@ export default class Home extends Component {
             <h2>Próximos estrenos</h2>
             <div className="tarjetas-container">
               {this.state.proximas.slice(0, 5).map((elm, idx) => (
-                <Tarjeta key={`${elm}-${idx}`} pelicula={elm} />
+                <Tarjeta key={`${elm.title}-${idx}`} pelicula={elm} />
               ))}
             </div>
             <Link to="/proximas">
-              <button>Ver más Estrenos </button>
+              <button>Ver más Estrenos</button>
             </Link>
           </div>
         </div>

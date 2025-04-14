@@ -22,8 +22,6 @@ class Tarjeta extends Component {
 Favorito = () => {
   this.setState((prevState) => ({
     favorito: !prevState.favorito
-
-    // y aca quiero que agregues a favoritos el id y lo mandes como prop a otra pagina de esta forma aca te doy un ejemplo de carrito pero lo tenes que hacer con agregar y sacar de favoritos
   }));
 };
 
