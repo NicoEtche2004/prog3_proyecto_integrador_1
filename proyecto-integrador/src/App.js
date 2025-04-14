@@ -7,7 +7,7 @@ import { Switch, Route } from "react-router-dom";
 
 import Home from "./screens/Home/Home";
 import Detalle from "./screens/Detalle/Detalle";
-// import Favoritos from "./screens/Favoritos/Favoritos";
+import Favoritos from "./screens/Favoritos/Favoritos";
 import NotFound from "./screens/NotFound/NotFound";
 import VerTodas from './screens/VerTodas/VerTodas';
 // import Resultados from "./screens/Resultados/Resultados";
@@ -18,7 +18,8 @@ function App() {
       <Header />
       <Switch>
         <Route path="/" exact={true} component={Home} />
-        <Route path="/detalle/:id" exact={true} component={Detalle} />    
+        <Route path="/detalle/:id" exact={true} component={Detalle} />
+        <Route path="/favoritos" exact ={true} component={Favoritos} />    
         <Route path="/todas/:tipo"  component={VerTodas} />
         <Route component={NotFound} />
       </Switch>
