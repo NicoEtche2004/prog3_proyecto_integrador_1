@@ -6,44 +6,58 @@ class Favoritos extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      favoritos: [],
+      pelisFavoritas: [],
     };
   }
 
   componentDidMount() {
-    const favs = JSON.parse(localStorage.getItem("favoritos")) || [];
-    this.setState({ favoritos: favs });
+    const storage = localStorage.getItem("favoritos");
+    if (storage !== null) {
+      const ids = JSON.parse(storage);
+      let pelisCargadas = [];
+
+      for (let i = 0; i < ids.length; i++) {
+        fetch(`https://api.themoviedb.org/3/movie/${ids[i]}`, {
+          headers: {
+            accept: "application/json",
+            Authorization:
+              "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2NDQ3NTA0ZjllODhiZDIzNzhlYmU0OTE2Y2FiMzE4NCIsIm5iZiI6MTc0MjIxMzE1OS4zMDA5OTk5LCJzdWIiOiI2N2Q4MTAyNzMxNTM4ZGU2MDhmMWUzMTQiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.YTX_q1oWy0cZlL0KzomYbkSDB6x-eGrOcSytRCI2WQQ",
+          },
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            pelisCargadas.push(data);
+            this.setState({ pelisFavoritas: pelisCargadas });
+          });
+      }
+    }
   }
 
-  eliminarFavorito = (id) => {
-    const nuevosFavs = this.state.favoritos.filter((p) => p.id !== id);
-
-    localStorage.setItem("favoritos", JSON.stringify(nuevosFavs));
-    sessionStorage.setItem("favoritos", JSON.stringify(nuevosFavs));
-
-    this.setState({ favoritos: nuevosFavs });
+  quitarPeliDeVista = (id) => {
+    const actualizadas = this.state.pelisFavoritas.filter((p) => p.id !== id);
+    this.setState({ pelisFavoritas: actualizadas });
   };
 
-render() {
-  const { favoritos } = this.state;
-
-  return (
-    <div className="favoritos">
-      <h2>Mis favoritos</h2>
-
-      {favoritos.length === 0 ? (
-        <p>No tenés películas favoritas todavía.</p>
-      ) : (
-        <div className="tarjetas-container">
-          {favoritos.map((peli) => (
-            <Tarjeta key={peli.id} pelicula={peli} />
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
+  render() {
+    return (
+      <div className="favoritos">
+        <h2>Mis favoritos</h2>
+        {this.state.pelisFavoritas.length === 0 ? (
+          <p>No tenés películas favoritas todavía.</p>
+        ) : (
+          <div className="tarjetas-container">
+            {this.state.pelisFavoritas.map((peli) => (
+              <Tarjeta
+                key={peli.id}
+                pelicula={peli}
+                onQuitar={() => this.quitarPeliDeVista(peli.id)}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
 }
 
 export default Favoritos;

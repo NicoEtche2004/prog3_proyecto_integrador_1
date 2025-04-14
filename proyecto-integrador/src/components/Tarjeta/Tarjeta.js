@@ -6,60 +6,107 @@ class Tarjeta extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      mostrarDescripcion: false,
+      dataPelicula: props.pelicula,
       favorito: false,
+      mostrarDescripcion: false,
     };
-
-
   }
 
- Descripcion = () => {
-  const nuevoEstado = !this.state.mostrarDescripcion;
-  this.setState({ mostrarDescripcion: nuevoEstado });
-};
+  componentDidMount() {
+    let storage = localStorage.getItem("favoritos");
+    if (storage !== null) {
+      let storageParseado = JSON.parse(storage);
+      let estaMiId = storageParseado.includes(this.state.dataPelicula.id);
 
+      if (estaMiId) {
+        this.setState({ favorito: true });
+      }
+    }
+  }
 
-Favorito = () => {
-  this.setState((prevState) => ({
-    favorito: !prevState.favorito
-  }));
-};
+  agregarAFavoritos(id) {
+    let storage = localStorage.getItem("favoritos");
 
+    if (storage !== null) {
+      let arrParseado = JSON.parse(storage);
+      arrParseado.push(id);
+      let arrStringificado = JSON.stringify(arrParseado);
+      localStorage.setItem("favoritos", arrStringificado);
+    } else {
+      let primerID = [id];
+      let arrStringificado = JSON.stringify(primerID);
+      localStorage.setItem("favoritos", arrStringificado);
+    }
+
+    this.setState({
+      favorito: true,
+    });
+  }
+
+  quitarDeFavoritos(id) {
+    const storage = localStorage.getItem("favoritos");
+    const storageParseado = JSON.parse(storage);
+    const filtrarStorage = storageParseado.filter((elm) => elm !== id);
+    const storageStringificado = JSON.stringify(filtrarStorage);
+    localStorage.setItem("favoritos", storageStringificado);
+
+    this.setState({
+      favorito: false,
+    });
+  }
+
+  toggleDescripcion = () => {
+    this.setState((prev) => ({
+      mostrarDescripcion: !prev.mostrarDescripcion,
+    }));
+  };
 
   render() {
-    const { pelicula } = this.props;
-    const { mostrarDescripcion, favorito } = this.state;
-
     return (
       <div className="tarjeta">
         <img
-          src={`https://image.tmdb.org/t/p/w500${pelicula.poster_path}`}
-          alt={pelicula.title}
+          src={`https://image.tmdb.org/t/p/w500${this.state.dataPelicula.poster_path}`}
+          alt={this.state.dataPelicula.title}
           width="200"
           height="300"
         />
 
-        <h3>{pelicula.title}</h3>
+        <h3>{this.state.dataPelicula.title}</h3>
 
         <p>
-          {mostrarDescripcion
-            ? pelicula.overview
-            : `${pelicula.overview.slice(0, 100)}...`}
+          {this.state.mostrarDescripcion
+            ? this.state.dataPelicula.overview
+            : `${this.state.dataPelicula.overview.slice(0, 100)}...`}
         </p>
 
-        <button onClick={this.Descripcion}>
-          {mostrarDescripcion ? "Ocultar descripción" : "Ver descripción"}
+        <button onClick={this.toggleDescripcion}>
+          {this.state.mostrarDescripcion
+            ? "Ocultar descripción"
+            : "Ver descripción"}
         </button>
 
-        
-        <Link to={`/detalle/${pelicula.id}`}>
+        <Link to={`/detalle/${this.state.dataPelicula.id}`}>
           <button>Ir a detalle</button>
         </Link>
 
-        
-        <button onClick={this.Favorito}>
-          {favorito ? "Quitar de favoritos" : "Agregar a favoritos"}
-        </button>
+        {this.state.favorito ? (
+          <button
+            onClick={() => {
+              this.quitarDeFavoritos(this.state.dataPelicula.id);
+              if (this.props.onQuitar) {
+                this.props.onQuitar();
+              }
+            }}
+          >
+            Quitar de favoritos
+          </button>
+        ) : (
+          <button
+            onClick={() => this.agregarAFavoritos(this.state.dataPelicula.id)}
+          >
+            Agregar a favoritos
+          </button>
+        )}
       </div>
     );
   }
