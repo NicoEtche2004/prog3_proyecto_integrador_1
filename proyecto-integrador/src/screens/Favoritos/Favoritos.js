@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Tarjeta from "../../components/Tarjeta/Tarjeta";
-import "./style.css"; // Asegúrate de importar el archivo CSS adecuado
+import "./style.css";
 
 class Favoritos extends Component {
   constructor(props) {
