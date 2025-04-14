@@ -65,7 +65,7 @@ export default class Home extends Component {
         {this.state.filtradas.slice(0, 5).map((elm, idx) => (
           <Tarjeta key={`${elm}-${idx}`} pelicula={elm} />
         ))}
-        <Link to="/todas/populares">
+        <Link to="/populares">
           <button>Ver todas</button>
         </Link>
 
@@ -73,7 +73,7 @@ export default class Home extends Component {
         {this.state.filtradas.slice(0, 5).map((elm, idx) => (
           <Tarjeta key={`${elm}-${idx}`} pelicula={elm} />
         ))}
-        <Link to="/todas/proximas">
+        <Link to="/proximas">
           <button>Ver todas</button>
         </Link>
       </>

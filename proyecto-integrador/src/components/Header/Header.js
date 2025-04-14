@@ -5,8 +5,8 @@ export default function Header() {
     { path: "/", label: "Digital Cine" },
     { path: "/", label: "Home" },
     { path: "/Favoritos", label: "Favoritos" },
-    { path: "/todas/populares", label: "Populares" },
-    { path: "/todas/proximas", label: "Por venir" },
+    { path: "/populares", label: "Populares" },
+    { path: "/proximas", label: "Estenos" },
   ];
   // aca cambie
   return (
