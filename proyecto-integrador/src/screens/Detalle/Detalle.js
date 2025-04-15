@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import './style.css';
 
-export default class Detalle extends Component {
+class Detalle extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -11,7 +12,8 @@ export default class Detalle extends Component {
   }
 
   componentDidMount() {
-    const { id } = this.props.match.params; 
+    const { id } = this.props.match.params;
+
     const options = {
       method: 'GET',
       headers: {
@@ -24,17 +26,52 @@ export default class Detalle extends Component {
     fetch(`https://api.themoviedb.org/3/movie/${id}?language=en-US`, options)
       .then((res) => res.json())
       .then((data) => {
-        const favoritos = JSON.parse(localStorage.getItem('favoritos')) || [];
-        const esFav = favoritos.some((p) => p.id === data.id);
-      
+        let storage = localStorage.getItem("favoritos");
+        let esFavorito = false;
+
+        if (storage !== null) {
+          let favoritosParseados = JSON.parse(storage);
+          esFavorito = favoritosParseados.includes(data.id);
+        }
+
         this.setState({
           pelicula: data,
-          favorito: esFav,
+          favorito: esFavorito,
         });
       });
   }
 
+  agregarAFavoritos(id) {
+    let storage = localStorage.getItem("favoritos");
 
+    if (storage !== null) {
+      let arrParseado = JSON.parse(storage);
+
+      if (!arrParseado.includes(id)) {
+        arrParseado.push(id);
+        let arrStringificado = JSON.stringify(arrParseado);
+        localStorage.setItem("favoritos", arrStringificado);
+        this.setState({ favorito: true });
+      }
+    } else {
+      let primerID = [id];
+      let arrStringificado = JSON.stringify(primerID);
+      localStorage.setItem("favoritos", arrStringificado);
+      this.setState({ favorito: true });
+    }
+  }
+
+  quitarDeFavoritos(id) {
+    const storage = localStorage.getItem("favoritos");
+    const storageParseado = JSON.parse(storage);
+    const filtrarStorage = storageParseado.filter((elm) => elm !== id);
+    const storageStringificado = JSON.stringify(filtrarStorage);
+    localStorage.setItem("favoritos", storageStringificado);
+
+    this.setState({
+      favorito: false,
+    });
+  }
 
   render() {
     const pelicula = this.state.pelicula;
@@ -46,10 +83,10 @@ export default class Detalle extends Component {
     return (
       <div className="detalle-container">
         <div className="detalle-header">
-          <img 
-            src={`https://image.tmdb.org/t/p/w500${pelicula.poster_path}`} 
-            alt={pelicula.title} 
-            className="detalle-img" 
+          <img
+            className="detalle-img"
+            src={`https://image.tmdb.org/t/p/w500${pelicula.poster_path}`}
+            alt={pelicula.title}
           />
           <div className="detalle-info">
             <h1>{pelicula.title}</h1>
@@ -64,9 +101,15 @@ export default class Detalle extends Component {
             </ul>
 
             <div className="button-group">
-              <button onClick={this.toggleFavorito}>
-                {this.state.favorito ? 'Quitar de favoritos' : 'Agregar a favoritos'}
-              </button>
+              {this.state.favorito ? (
+                <button onClick={() => this.quitarDeFavoritos(pelicula.id)}>
+                  Quitar de favoritos
+                </button>
+              ) : (
+                <button onClick={() => this.agregarAFavoritos(pelicula.id)}>
+                  Agregar a favoritos
+                </button>
+              )}
 
               <Link to="/">
                 <button>Volver a la Home</button>
@@ -78,3 +121,5 @@ export default class Detalle extends Component {
     );
   }
 }
+
+export default Detalle;

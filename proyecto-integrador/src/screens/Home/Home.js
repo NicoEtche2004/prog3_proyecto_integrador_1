@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Tarjeta from "../../components/Tarjeta/Tarjeta";
+import Buscador from "../../components/Buscador/Buscador";
 
 import "./style.css";
 
@@ -83,6 +84,7 @@ export default class Home extends Component {
     return (
       <>
         <div className="categorias">
+        <Buscador history={this.props.history} />
           <div className="categoria">
             <h2>Películas populares</h2>
             <div className="tarjetas-container">

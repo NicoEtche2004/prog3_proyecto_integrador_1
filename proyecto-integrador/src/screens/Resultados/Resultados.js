@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Tarjeta from "../../components/Tarjeta/Tarjeta";
 import { Redirect } from "react-router-dom";
+import Buscador from "../../components/Buscador/Buscador";
 
 class Resultados extends Component {
   constructor(props) {
@@ -15,12 +16,25 @@ class Resultados extends Component {
 
   componentDidMount() {
     const query = this.props.match.params.query;
-
     if (!query) {
       this.setState({ cargando: false, resultados: [] });
       return;
     }
 
+    this.buscarPeliculas(query);
+  }
+
+  componentDidUpdate(prevProps) {
+    const queryAnterior = prevProps.match.params.query;
+    const queryActual = this.props.match.params.query;
+
+    if (queryAnterior !== queryActual) {
+      this.setState({ cargando: true, error: false, redirigir404: false });
+      this.buscarPeliculas(queryActual);
+    }
+  }
+
+  buscarPeliculas(query) {
     const options = {
       method: "GET",
       headers: {
@@ -60,19 +74,21 @@ class Resultados extends Component {
 
     return (
       <div>
+        <Buscador history={this.props.history} />
         <h2>Resultados para: "{query}"</h2>
-
-        {cargando ? (
-          <p>Cargando resultados...</p>
-        ) : error ? (
-          <p>Ocurrió un error al buscar. Por favor, intentá más tarde.</p>
-        ) : resultados.length === 0 ? (
-          <p>No se encontraron resultados.</p>
-        ) : (
-          resultados.map((pelicula) => (
-            <Tarjeta key={pelicula.id} pelicula={pelicula} />
-          ))
-        )}
+        <div className="tarjetas-container">
+          {cargando ? (
+            <p>Cargando resultados...</p>
+          ) : error ? (
+            <p>Ocurrió un error al buscar. Por favor, intentá más tarde.</p>
+          ) : resultados.length === 0 ? (
+            <p>No se encontraron resultados.</p>
+          ) : (
+            resultados.map((pelicula) => (
+              <Tarjeta key={pelicula.id} pelicula={pelicula} />
+            ))
+          )}
+        </div>
       </div>
     );
   }
